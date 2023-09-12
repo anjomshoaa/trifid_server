@@ -1,0 +1,64 @@
+globals:
+  datasetBaseUrl: http://crispy.ai.wu.ac.at/
+  sparqlEndpoint:
+    url: http://crispy.ai.wu.ac.at/blazegraph/namespace/crisp/sparql
+
+template:
+  files:
+    main: templates/main.hbs
+    header: templates/header.hbs
+    footer: templates/footer.hbs
+  title: CRISP - Knowledge Graph
+
+
+middlewares:
+
+  static-assets:
+    module: trifid-core/middlewares/static.js
+    order: 0
+    paths: /static-assets
+    config:
+      directory: file:static
+
+  rewrite:
+    module: trifid-core/middlewares/rewrite.js
+
+  welcome:
+    module: trifid-core/middlewares/view.js
+    paths: /
+    methods: GET
+    config:
+      path: views/welcome.hbs
+
+
+  entity-renderer:
+    module: "@zazuko/trifid-entity-renderer"
+    config:
+      path: file:./views/entity.hbs
+
+  yasgui:
+    module: trifid-plugin-yasgui
+    paths: /sparql
+    config:
+      urlShortener: https://s.zazuko.com/api/v1/shorten
+
+
+  sparql-proxy:
+    module: "@zazuko/trifid-plugin-sparql-proxy"
+    paths: /query
+    config:
+      queryOperation: postQueryUrlencoded
+      rewriteQueries: true
+      cache:
+        prefix: env:SPARQL_PROXY_CACHE_PREFIX
+        url: env:SPARQL_PROXY_CACHE_URL
+        clearAtStartup: env:SPARQL_PROXY_CACHE_CLEAR_AT_STARTUP
+
+
+  sparql-handler:
+    module: trifid-handler-sparql
+    config:
+      resourceExistsQuery: "ASK { <${iri}> ?p ?o }"
+      resourceGraphQuery: "DESCRIBE <${iri}>"
+      containerExistsQuery: "ASK { ?s a ?o. FILTER REGEX(STR(?s), \"^${iri}\") }"
+      containerGraphQuery: "CONSTRUCT { ?s a ?o. } WHERE { ?s a ?o. FILTER REGEX(STR(?s), \"^${iri}\") }"
