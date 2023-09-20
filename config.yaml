@@ -1,7 +1,6 @@
 globals:
   datasetBaseUrl: http://crispy.ai.wu.ac.at/
-  sparqlEndpoint:
-    url: http://crispy.ai.wu.ac.at/blazegraph/namespace/crisp/sparql
+  endpointUrl: http://localhost:9999/blazegraph/namespace/crisp/sparql
 
 template:
   files:
