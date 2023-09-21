@@ -63,6 +63,7 @@ middlewares:
   sparql-handler:
     module: trifid-handler-sparql
     config:
+      endpointUrl: http://localhost:9999/blazegraph/namespace/crisp/sparql 
       resourceExistsQuery: "ASK { <${iri}> ?p ?o }"
       resourceGraphQuery: "DESCRIBE <${iri}>"
       containerExistsQuery: "ASK { ?s a ?o. FILTER REGEX(STR(?s), \"^${iri}\") }"
