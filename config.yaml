@@ -1,6 +1,11 @@
+server:
+  logLevel: debug
+
 globals:
   datasetBaseUrl: http://crispy.ai.wu.ac.at/
-  endpointUrl: http://localhost:9999/blazegraph/namespace/crisp/sparql
+  sparqlEndpoint:
+    url: http://localhost:9999/blazegraph/namespace/crisp/sparql 
+
 
 template:
   files:
@@ -39,6 +44,7 @@ middlewares:
     module: trifid-plugin-yasgui
     paths: /sparql
     config:
+      endpointUrl: http://crispy.ai.wu.ac.at/query
       urlShortener: https://s.zazuko.com/api/v1/shorten
 
 
